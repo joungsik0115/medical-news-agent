@@ -5,10 +5,10 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// Server-side client with service role for write operations
+// Falls back to anon key when service role key is not set (works while RLS is disabled)
 export function createServiceClient() {
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-  return createClient(supabaseUrl, serviceRoleKey, {
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseAnonKey
+  return createClient(supabaseUrl, key, {
     auth: { persistSession: false },
   })
 }
