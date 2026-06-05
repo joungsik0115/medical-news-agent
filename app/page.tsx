@@ -6,7 +6,8 @@ import Pagination from '@/components/Pagination'
 import CrawlButton from '@/components/CrawlButton'
 import type { NewsArticle, SourceCategory } from '@/types'
 
-export const revalidate = 300
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 interface PageProps {
   searchParams: {
