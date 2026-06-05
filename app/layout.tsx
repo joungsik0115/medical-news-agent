@@ -24,14 +24,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
 
             <div className="flex items-center gap-3 min-w-0">
-              {/* 좋은병원들 공식 로고 */}
+              {/* 좋은문화병원 공식 로고 */}
               <Image
-                src="/gh-logo.png"
-                alt="좋은병원들 (GOOD HOSPITALS)"
-                width={203}
-                height={58}
+                src="/moonhwa-logo.png"
+                alt="좋은문화병원 (GOOD MOONHWA HOSPITAL)"
+                width={366}
+                height={65}
                 priority
-                className="h-9 w-auto shrink-0"
+                className="h-10 w-auto shrink-0"
               />
               <div className="hidden sm:flex flex-col min-w-0 border-l border-[#e8eaed] pl-3">
                 <h1 className="text-[13px] font-bold text-[#202124] leading-tight truncate">

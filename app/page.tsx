@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { supabase } from '@/lib/supabase'
 import NewsCard from '@/components/NewsCard'
 import TopicTabs from '@/components/TopicTabs'
+import SearchBar from '@/components/SearchBar'
 import Pagination from '@/components/Pagination'
 import CrawlButton from '@/components/CrawlButton'
 import { CATEGORY_META } from '@/lib/crawlers/sources'
@@ -88,15 +89,24 @@ export default async function HomePage({ searchParams }: PageProps) {
         </p>
       </section>
 
+      {/* ── Search Bar ─────────────────────────────────────────── */}
+      <Suspense fallback={<div className="h-11 w-full max-w-xl mx-auto bg-[#f1f3f4] rounded-full animate-pulse" />}>
+        <SearchBar />
+      </Suspense>
+
       {/* ── Topic Tabs ─────────────────────────────────────────── */}
       <Suspense fallback={<div className="h-12 bg-[#f1f3f4] rounded-full animate-pulse" />}>
         <TopicTabs counts={counts} />
       </Suspense>
 
-      {/* ── Crawl button (subtle, right-aligned) ───────────────── */}
+      {/* ── Status row ─────────────────────────────────────────── */}
       <div className="flex items-center justify-between -mt-4">
         <p className="text-xs text-[#5f6368]">
-          {activeTopic ? `${activeMeta?.label} ${total}개` : `최신 ${total}개`}
+          {searchParams.q
+            ? <>검색: <span className="font-semibold text-[#202124]">&quot;{searchParams.q}&quot;</span> · {total}개</>
+            : activeTopic
+              ? `${activeMeta?.label} ${total}개`
+              : `최신 ${total}개`}
         </p>
         <CrawlButton />
       </div>
@@ -105,10 +115,18 @@ export default async function HomePage({ searchParams }: PageProps) {
       {articles.length === 0 ? (
         <div className="text-center py-32 text-[#5f6368]">
           <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-[#f1f3f4] flex items-center justify-center text-3xl">
-            📭
+            {searchParams.q ? '🔍' : '📭'}
           </div>
-          <p className="text-lg font-medium text-[#202124]">기사가 없습니다</p>
-          <p className="text-sm mt-1">우측 상단의 &quot;지금 수집&quot; 버튼을 눌러 첫 수집을 시작하세요.</p>
+          <p className="text-lg font-medium text-[#202124]">
+            {searchParams.q
+              ? `"${searchParams.q}" 검색 결과가 없습니다`
+              : '기사가 없습니다'}
+          </p>
+          <p className="text-sm mt-1">
+            {searchParams.q
+              ? '다른 키워드로 검색하거나 필터를 초기화해 보세요.'
+              : '우측 상단의 "지금 수집" 버튼을 눌러 첫 수집을 시작하세요.'}
+          </p>
         </div>
       ) : (
         <div className="grid gap-2.5 md:grid-cols-2 lg:grid-cols-3">
