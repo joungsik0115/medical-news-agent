@@ -20,7 +20,7 @@ interface PageProps {
 
 async function getArticles(sp: PageProps['searchParams']) {
   const page = Math.max(1, parseInt(sp.page ?? '1'))
-  const limit = 12
+  const limit = 30
   const from = (page - 1) * limit
 
   let query = supabase
@@ -111,7 +111,7 @@ export default async function HomePage({ searchParams }: PageProps) {
           <p className="text-sm mt-1">우측 상단의 &quot;지금 수집&quot; 버튼을 눌러 첫 수집을 시작하세요.</p>
         </div>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-2.5 md:grid-cols-2 lg:grid-cols-3">
           {articles.map((article) => (
             <NewsCard key={article.id} article={article} />
           ))}
