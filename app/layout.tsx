@@ -35,10 +35,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               />
               <div className="hidden sm:flex flex-col min-w-0 border-l border-[#e8eaed] pl-3">
                 <h1 className="leading-tight truncate">
-                  <span className="text-[15px] font-extrabold tracking-tight bg-gradient-to-r from-[#B8860B] via-[#DAA520] to-[#C8960C] bg-clip-text text-transparent">
-                    인총쌤
+                  <span className="text-[18px] font-black tracking-tight">
+                    <span style={{ color: '#4285F4' }}>인</span>
+                    <span style={{ color: '#EA4335' }}>총</span>
+                    <span style={{ color: '#FBBC05' }}>쌤</span>
                   </span>
-                  <span className="text-[13px] font-bold text-[#202124]">의 뉴스 에이전트</span>
+                  <span className="text-[13px] font-semibold text-[#5f6368]">의 뉴스 에이전트</span>
                 </h1>
                 <p className="text-[11px] text-[#5f6368] leading-tight">
                   의료 AI · 병원 경영혁신 · 우리 병원들
