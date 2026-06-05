@@ -80,6 +80,16 @@ export const SOURCES: SourceConfig[] = [
     category: 'hr_labor',
     language: 'ko',
   },
+
+  // ── 코칭 리더십 ──────────────────────────────────────
+  {
+    id: 'gnews_coaching_leadership',
+    name: '코칭 리더십',
+    feedUrl: gnews('"코칭 리더십" OR "리더십 코칭" OR executive coaching OR 임원 코칭'),
+    type: 'rss',
+    category: 'coaching_leadership',
+    language: 'ko',
+  },
 ]
 
 export const CATEGORY_META: Record<
@@ -127,5 +137,12 @@ export const CATEGORY_META: Record<
     color: 'text-amber-700',
     ring: 'bg-amber-50 border-amber-200',
     chip: 'bg-amber-600',
+  },
+  coaching_leadership: {
+    label: '코칭 리더십',
+    emoji: '🎯',
+    color: 'text-purple-700',
+    ring: 'bg-purple-50 border-purple-200',
+    chip: 'bg-purple-600',
   },
 }

@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { supabase } from '@/lib/supabase'
 import NewsCard from '@/components/NewsCard'
+import NewsBriefing from '@/components/NewsBriefing'
 import TopicTabs from '@/components/TopicTabs'
 import SearchBar from '@/components/SearchBar'
 import Pagination from '@/components/Pagination'
@@ -55,10 +56,26 @@ async function getTopicCounts() {
   return counts
 }
 
+async function getBriefing(sp: PageProps['searchParams']) {
+  let query = supabase
+    .from('news_articles')
+    .select('*')
+    .eq('is_summarized', true)
+    .order('crawled_at', { ascending: false })
+    .limit(5)
+
+  if (sp.topic) query = query.eq('source_category', sp.topic)
+  if (sp.q) query = query.ilike('title', `%${sp.q}%`)
+
+  const { data } = await query
+  return (data ?? []) as NewsArticle[]
+}
+
 export default async function HomePage({ searchParams }: PageProps) {
-  const [{ articles, total, page, totalPages }, counts] = await Promise.all([
+  const [{ articles, total, page, totalPages }, counts, briefing] = await Promise.all([
     getArticles(searchParams),
     getTopicCounts(),
+    getBriefing(searchParams),
   ])
 
   const totalAll = Object.values(counts).reduce((a, b) => a + b, 0)
@@ -98,6 +115,18 @@ export default async function HomePage({ searchParams }: PageProps) {
       <Suspense fallback={<div className="h-12 bg-[#f1f3f4] rounded-full animate-pulse" />}>
         <TopicTabs counts={counts} />
       </Suspense>
+
+      {/* ── 5-item Briefing ────────────────────────────────────── */}
+      {briefing.length > 0 && (
+        <NewsBriefing
+          articles={briefing}
+          label={
+            searchParams.q
+              ? `"${searchParams.q}" 검색`
+              : activeMeta?.label
+          }
+        />
+      )}
 
       {/* ── Status row ─────────────────────────────────────────── */}
       <div className="flex items-center justify-between -mt-4">

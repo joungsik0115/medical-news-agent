@@ -11,6 +11,7 @@ const TOPICS: { id: SourceCategory; short: string }[] = [
   { id: 'our_hospitals',          short: '우리병원' },
   { id: 'regenerative_medicine',  short: '재생의료' },
   { id: 'hr_labor',               short: '인사노무' },
+  { id: 'coaching_leadership',    short: '코칭리더십' },
 ]
 
 // All possible chip backgrounds (kept here so Tailwind sees them and includes them)
@@ -21,6 +22,7 @@ const ACTIVE_BG: Record<SourceCategory, string> = {
   our_hospitals:          'bg-rose-600 text-white border-transparent shadow-md',
   regenerative_medicine:  'bg-teal-600 text-white border-transparent shadow-md',
   hr_labor:               'bg-amber-600 text-white border-transparent shadow-md',
+  coaching_leadership:    'bg-purple-600 text-white border-transparent shadow-md',
 }
 
 export default function TopicTabs({ counts }: { counts: Record<string, number> }) {
