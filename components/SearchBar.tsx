@@ -1,42 +1,56 @@
 'use client'
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { useState, useEffect, useTransition } from 'react'
+import { useState, useEffect, useRef, useTransition } from 'react'
 
 export default function SearchBar() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const initial = searchParams.get('q') ?? ''
-  const [value, setValue] = useState(initial)
+
+  const [value, setValue] = useState(() => searchParams.get('q') ?? '')
   const [isPending, startTransition] = useTransition()
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  // Keep input in sync if URL changes externally (back button, filter clear)
-  useEffect(() => {
-    setValue(searchParams.get('q') ?? '')
-  }, [searchParams])
+  // Push a new URL only when needed
+  const submit = (q: string) => {
+    const trimmed = q.trim()
+    const current = searchParams.get('q') ?? ''
+    if (trimmed === current) return // no-op — already in URL
 
-  // Debounced URL update
+    const params = new URLSearchParams(searchParams.toString())
+    if (trimmed) params.set('q', trimmed)
+    else params.delete('q')
+    params.delete('page')
+    startTransition(() => {
+      const qs = params.toString()
+      router.push(qs ? `${pathname}?${qs}` : pathname)
+    })
+  }
+
+  // Debounced auto-search as user types (no searchParams dep → no loop)
   useEffect(() => {
-    const t = setTimeout(() => {
-      const current = searchParams.get('q') ?? ''
-      if (value === current) return
-      const params = new URLSearchParams(searchParams.toString())
-      if (value.trim()) params.set('q', value.trim())
-      else params.delete('q')
-      params.delete('page')
-      startTransition(() => {
-        const qs = params.toString()
-        router.push(qs ? `${pathname}?${qs}` : pathname)
-      })
-    }, 350)
+    const t = setTimeout(() => submit(value), 400)
     return () => clearTimeout(t)
-  }, [value, pathname, router, searchParams])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value])
 
-  const clear = () => setValue('')
+  const onClear = () => {
+    setValue('')
+    submit('')
+    inputRef.current?.focus()
+  }
 
   return (
-    <div className="relative w-full max-w-xl mx-auto">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        submit(value)
+        inputRef.current?.blur()
+      }}
+      className="relative w-full max-w-xl mx-auto"
+      role="search"
+    >
       <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
         {isPending ? (
           <svg className="animate-spin h-4 w-4 text-[#5f6368]" viewBox="0 0 24 24" fill="none">
@@ -52,8 +66,11 @@ export default function SearchBar() {
       </div>
 
       <input
-        type="search"
-        placeholder="제목 검색 (예: ESG, 챗GPT, 노무, 재생의료...)"
+        ref={inputRef}
+        type="text"
+        enterKeyHint="search"
+        autoComplete="off"
+        placeholder="제목 검색 후 Enter (예: ESG, 챗GPT, 노무, 재생의료)"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         className="w-full h-11 pl-11 pr-11 rounded-full border border-[#dfe1e5] bg-white text-sm text-[#202124] placeholder:text-[#9aa0a6] outline-none focus:border-[#1a73e8] focus:ring-2 focus:ring-[#1a73e8]/15 transition-all"
@@ -62,7 +79,8 @@ export default function SearchBar() {
 
       {value && (
         <button
-          onClick={clear}
+          type="button"
+          onClick={onClear}
           className="absolute inset-y-0 right-3 my-auto h-7 w-7 flex items-center justify-center rounded-full text-[#5f6368] hover:bg-[#f1f3f4] transition-colors"
           aria-label="검색어 지우기"
         >
@@ -72,6 +90,6 @@ export default function SearchBar() {
           </svg>
         </button>
       )}
-    </div>
+    </form>
   )
 }
