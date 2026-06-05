@@ -23,13 +23,66 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <header className="bg-white sticky top-0 z-20" style={{ boxShadow: '0 1px 3px 0 rgba(60,64,67,.3), 0 4px 8px 3px rgba(60,64,67,.06)' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
 
-            {/* Logo */}
+            {/* Logo - Busan (Seagull + Waves) */}
             <div className="flex items-center gap-3 min-w-0">
-              <div className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 shrink-0 shadow-sm">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="white" opacity="0.3"/>
-                  <path d="M9 16V8h2v8H9zm4-8v8h2V8h-2z" fill="white"/>
-                  <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="1.5" fill="none" opacity="0.4"/>
+              <div
+                className="flex items-center justify-center w-10 h-10 rounded-full shrink-0 shadow-sm relative overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, #4FC3F7 0%, #1976D2 60%, #0D47A1 100%)',
+                }}
+                title="부산 갈매기"
+              >
+                <svg
+                  width="26"
+                  height="26"
+                  viewBox="0 0 64 64"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-label="부산 상징 갈매기"
+                >
+                  {/* Sun */}
+                  <circle cx="48" cy="20" r="5" fill="#FFD54F" opacity="0.9" />
+
+                  {/* Seagull (large M) */}
+                  <path
+                    d="M10 30 Q20 14 30 28 Q34 22 38 28 Q48 14 58 30"
+                    stroke="white"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
+                  />
+
+                  {/* Smaller seagull behind */}
+                  <path
+                    d="M22 38 Q28 32 34 38 Q40 32 46 38"
+                    stroke="white"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
+                    opacity="0.7"
+                  />
+
+                  {/* Wave 1 */}
+                  <path
+                    d="M4 50 Q14 44 24 50 T44 50 T64 50"
+                    stroke="white"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    fill="none"
+                    opacity="0.85"
+                  />
+
+                  {/* Wave 2 */}
+                  <path
+                    d="M4 56 Q14 50 24 56 T44 56 T64 56"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    fill="none"
+                    opacity="0.6"
+                  />
                 </svg>
               </div>
               <div className="min-w-0">
