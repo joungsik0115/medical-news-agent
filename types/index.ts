@@ -1,12 +1,10 @@
 export type SourceCategory =
-  | 'global_health_org'
-  | 'global_journal'
-  | 'global_medical_ai'
-  | 'korea_gov'
-  | 'korea_medical_ai'
-  | 'korea_medical_news'
-
-export type TopicCategory = 'disease' | 'medical_ai' | 'korea_hospital' | 'general'
+  | 'medical_ai'           // 의료 AI 일반
+  | 'hospital_ai'          // 병원 AI 도입 사례
+  | 'hospital_management'  // 병원 경영 혁신
+  | 'our_hospitals'        // 좋은문화병원·은성의료재단·좋은병원들
+  | 'regenerative_medicine' // 첨단재생의료
+  | 'hr_labor'             // 인사노무 이슈
 
 export interface NewsArticle {
   id: string
@@ -16,7 +14,7 @@ export interface NewsArticle {
   original_url: string
   original_content: string | null
   summary_ko: string | null
-  category: TopicCategory | null
+  category: string | null
   language: 'en' | 'ko'
   published_at: string | null
   crawled_at: string
@@ -29,7 +27,6 @@ export interface CrawledArticle {
   title: string
   original_url: string
   original_content?: string
-  category?: TopicCategory
   language: 'en' | 'ko'
   published_at?: string
 }
@@ -48,14 +45,4 @@ export interface SourceConfig {
   type: 'rss' | 'html'
   category: SourceCategory
   language: 'en' | 'ko'
-  selectors?: HtmlSelectors
-}
-
-export interface HtmlSelectors {
-  item: string
-  title: string
-  link: string
-  content?: string
-  date?: string
-  linkBase?: string
 }

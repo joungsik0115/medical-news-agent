@@ -1,13 +1,11 @@
 import type { CrawlResult } from '@/types'
 import { SOURCES } from './sources'
 import { crawlRSS } from './rss'
-import { crawlHTML } from './html'
 
 export async function runAllCrawlers(): Promise<CrawlResult[]> {
   const results = await Promise.allSettled(
     SOURCES.map(async (source) => {
-      const articles =
-        source.type === 'rss' ? await crawlRSS(source) : await crawlHTML(source)
+      const articles = await crawlRSS(source)
       return { source: source.name, count: articles.length, articles } as CrawlResult
     })
   )

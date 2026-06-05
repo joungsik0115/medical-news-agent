@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase'
-import { summarizeToKorean, classifyTopic } from '@/lib/openrouter'
+import { summarizeToKorean } from '@/lib/openrouter'
 
 export const maxDuration = 300
 
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   const db = createServiceClient()
   const { data: articles, error } = await db
     .from('news_articles')
-    .select('id, title, original_content, language')
+    .select('id, title, original_content')
     .eq('is_summarized', false)
     .order('crawled_at', { ascending: true })
     .limit(20)
@@ -31,14 +31,12 @@ export async function POST(req: NextRequest) {
     try {
       const summary = await summarizeToKorean(
         article.title,
-        article.original_content ?? article.title,
-        article.language ?? 'en'
+        article.original_content ?? article.title
       )
-      const category = classifyTopic(article.title, article.original_content ?? '')
 
       const { error: upErr } = await db
         .from('news_articles')
-        .update({ summary_ko: summary, category, is_summarized: true })
+        .update({ summary_ko: summary, is_summarized: true })
         .eq('id', article.id)
 
       if (upErr) throw upErr
